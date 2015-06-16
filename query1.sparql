@@ -1,0 +1,8 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpediaowl: <http://dbpedia.org/ontology/>
+
+SELECT ?uscStudents AS ?USC_STUDENT_COUNT ?uclaStudents AS ?UCLA_STUDENT_COUNT WHERE {
+   <http://dbpedia.org/resource/University_of_Southern_California> dbpedia-owl:numberOfStudents ?uscStudents .
+   <http://dbpedia.org/resource/University_of_California,_Los_Angeles> dbpedia-owl:numberOfStudents ?uclaStudents
+}

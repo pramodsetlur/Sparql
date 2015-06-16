@@ -1,0 +1,29 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpediaowl: <http://dbpedia.org/ontology/>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX dbpedia: <http://dbpedia.org/resource/>
+
+SELECT DISTINCT ?universityName AS ?UNIVERSITY_NAME WHERE 
+{
+  {
+    ?privateUniversitiesInLA <http://dbpedia.org/ontology/type> <http://dbpedia.org/resource/Private_university> .
+  }
+  UNION
+  {
+     ?privateUniversitiesInLA <http://dbpedia.org/property/type> <http://dbpedia.org/resource/Private_university> .
+  }
+  {
+    ?privateUniversitiesInLA dbpprop:location <http://dbpedia.org/resource/Los_Angeles>
+  }
+  UNION
+  {
+    ?privateUniversitiesInLA dbpedia-owl:city <http://dbpedia.org/resource/Los_Angeles>
+  }
+  
+  ?privateUniversitiesInLA dbpedia-owl:numberOfStudents ?numberOfStudents .
+  ?privateUniversitiesInLA rdfs:label ?universityName
+   FILTER (LANGMATCHES(LANG(?universityName), 'en'))
+}
+ORDER BY DESC(?numberOfStudents)
+LIMIT 10

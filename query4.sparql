@@ -1,0 +1,33 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpprop: <http://dbpedia.org/property/>
+PREFIX dbpp: <http://dbpedia.org/property/>
+PREFIX dbp: <http://dbpedia.org/property/>
+PREFIX dbpedia: <http://dbpedia.org/resource/>
+PREFIX db: <http://dbpedia.org/>
+PREFIX dbpr: <http://dbpedia.org/resource/>
+PREFIX dbprop: <http://dbpedia.org/property/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?universityName AS ?UNIVERSITY_NAME WHERE 
+{
+  {
+    {?universities <http://dbpedia.org/ontology/type> <http://dbpedia.org/resource/Private_university> .}
+    UNION
+    {?universities <http://dbpedia.org/property/type> <http://dbpedia.org/resource/Private_university> .}
+    UNION
+    {?universities <http://dbpedia.org/ontology/type> <http://dbpedia.org/resource/Public_university> .}
+    UNION
+    {?universities <http://dbpedia.org/property/type> <http://dbpedia.org/resource/Public_university> .}
+  }
+  {?universitiesInLA dbpprop:location <http://dbpedia.org/resource/Los_Angeles> .}
+  UNION
+  {?universitiesInLA dbpedia-owl:city <http://dbpedia.org/resource/Los_Angeles> .}
+  
+    ?universitiesInLA rdfs:label ?universityName
+   FILTER (LANGMATCHES(LANG(?universityName), 'en'))
+  ?universitiesInLA dbpprop:established ?establishedUniversities
+    BIND (xsd:integer(substr(xsd:string(?establishedUniversities),1,4)) AS ?sortedYears) .
+  FILTER (?sortedYears < 1915)
+}ORDER BY DESC(?sortedYears)
+LIMIT 10
